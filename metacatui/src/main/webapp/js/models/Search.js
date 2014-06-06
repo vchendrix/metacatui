@@ -46,6 +46,11 @@ define(['jquery', 'underscore', 'backbone'],
 		},
 		
 		getQuery: function(filter){
+			
+			return "";
+		},
+		
+		getSubQuery: function(filter){
 			if(typeof filter === undefined) return "";
 			
 			if(filter == "geohash"){
