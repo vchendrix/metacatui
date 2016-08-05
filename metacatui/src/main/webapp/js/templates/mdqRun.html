@@ -46,6 +46,8 @@
 			<%= result.check.description %>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
+			
+			<!-- code -->
 			<a 	
 				tabindex="0"
 				role="button"
@@ -54,8 +56,21 @@
 				data-html="true"
 				data-title="Code (<%= result.check.environment %>)"
 				data-content="<pre><%- result.check.code %></pre>">
+				<i class="icon icon-bug"></i>
+			</a>
+			
+			<!--  selectors -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Selectors"
+				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
-			</a>	
+			</a>
+				
 			<br/>
 			
 			<%
@@ -102,6 +117,7 @@
 			<%= result.check.description %>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
+			<!-- code -->
 			<a 	
 				tabindex="0"
 				role="button"
@@ -110,8 +126,19 @@
 				data-html="true"
 				data-title="Code (<%= result.check.environment %>)"
 				data-content="<pre><%- result.check.code %></pre>">
+				<i class="icon icon-bug"></i>
+			</a>
+			<!--  selectors -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Selectors"
+				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
-			</a>	
+			</a>
 			<br/>
 			<em><%- result.output[0].value %></em>
   		</li>
@@ -133,6 +160,7 @@
 			<%= result.check.description %>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
+			<!-- code -->
 			<a 	
 				tabindex="0"
 				role="button"
@@ -141,8 +169,19 @@
 				data-html="true"
 				data-title="Code (<%= result.check.environment %>)"
 				data-content="<pre><%- result.check.code %></pre>">
+				<i class="icon icon-bug"></i>
+			</a>
+			<!--  selectors -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Selectors"
+				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
-			</a>	
+			</a>
 			<br/>
 			<em><%- result.output[0].value %></em>
 		</div>
@@ -159,6 +198,7 @@
 			<%= result.check.description %>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
+			<!-- code -->
 			<a 	
 				tabindex="0"
 				role="button"
@@ -167,8 +207,19 @@
 				data-html="true"
 				data-title="Code (<%= result.check.environment %>)"
 				data-content="<pre><%- result.check.code %></pre>">
+				<i class="icon icon-bug"></i>
+			</a>
+			<!--  selectors -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Selectors"
+				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
-			</a>	
+			</a>
 			<br/>
 			<em><%- result.output[0].value %></em>
 		</div>
