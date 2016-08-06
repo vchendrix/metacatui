@@ -32,15 +32,56 @@
 	</div>	
 	<div class="panel-body">
 	<%
-		var groupedResults = _.groupBy(result, "status");
+		var groupedResults = _.groupBy(result, function(result) {
+			var color;
+			
+			// simple cases
+			// always blue for info and skip
+			if (result.check.level == 'INFO') {
+				color = 'BLUE';
+				return color;
+			}
+			if (result.status == 'SKIP') {
+				color = 'BLUE';
+				return color;
+			}
+			// always green for success
+			if (result.status == 'SUCCESS') {
+				color = 'GREEN';
+				return color;
+			} 
+			
+			// handle failures and warnings
+			if (result.status == 'FAILURE') {
+				color = 'RED';
+				if (result.check.level == 'OPTIONAL') {
+					color = 'ORANGE';
+				}
+			}
+			if (result.status == 'ERROR') {
+				color = 'ORANGE';
+				if (result.check.level == 'REQUIRED') {
+					color = 'RED';
+				}
+			}
+			//console.log("result color:" + color);
+			return color;
+			
+		});
+		
+		var total = result.length;
+		if (groupedResults.BLUE) {
+			total = total - groupedResults.BLUE.length;
+		}
+		
 	%>	
 	
-	<% if (groupedResults.SUCCESS) { %>
+	<% if (groupedResults.GREEN) { %>
 	
 		<div class="alert alert-success" role="alert">
 		<i class="icon icon-check-sign"></i>
 		<a role="button" data-toggle="collapse" href="#collapseSuccess" aria-expanded="false" aria-controls="collapseSuccess">
-		Passed <%=groupedResults.SUCCESS.length%> checks out of <%= result.length %>
+		Passed <%=groupedResults.GREEN.length%> checks out of <%= total %>
 		</a>
 		</div>
 		
@@ -48,7 +89,7 @@
 		<ul class="list-group">
 	
 	<%
-	_.each(groupedResults.SUCCESS, function(result) {
+	_.each(groupedResults.GREEN, function(result) {
 	%>
 	
   		<li class="list-group-item">
@@ -107,25 +148,16 @@
 		
 	<% } %>	
 	
-	<% if (groupedResults.SKIP) { %>
-		<div class="alert alert-info" role="alert">
-		<i class="icon icon-info-sign"></i>
-		<a role="button" data-toggle="collapse" href="#collapseSkip" aria-expanded="false" aria-controls="collapseSkip">
-		Skipped <%=groupedResults.SKIP.length%> checks
-		</a>
-		</div>
+	
 		
-		<div class="collapse" id="collapseSkip">
-		<ul class="list-group">
-		
-					
 	<%
-	_.each(groupedResults.SKIP, function(result) {
+	_.each(groupedResults.ORANGE, function(result) {
 	%>
-		<li class="list-group-item">
-  			<i class="icon icon-info-sign"></i>
-  			<strong><%= result.check.name %></strong>
+		<div class="alert alert-warning" role="alert">
+  			<i class="icon icon-warning-sign"></i>
+			<strong><%= result.check.name %></strong>
 			<%= result.check.description %>
+			<span class="badge pull-right"><%= result.status %></span>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
 			<!-- code -->
@@ -151,7 +183,131 @@
 				<i class="icon icon-code"></i>
 			</a>
 			<br/>
-			<em><%- result.output[0].value %></em>
+			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<em><%- output.value %></em>
+				<% } %>
+			<%
+			});
+			%>
+		</div>
+	<%
+	});
+	%>
+	
+	<%
+	_.each(groupedResults.RED, function(result) {
+	%>
+		<div class="alert alert-danger" role="alert">
+  			<i class="icon icon-remove-sign"></i>
+			<strong><%= result.check.name %></strong>
+			<%= result.check.description %>
+			<span class="badge pull-right"><%= result.status %></span>
+			<span class="badge pull-right"><%= result.check.level %></span>
+			<span class="badge pull-right"><%= result.check.type %></span>
+			<!-- code -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Code (<%= result.check.environment %>)"
+				data-content="<pre><%- result.check.code %></pre>">
+				<i class="icon icon-bug"></i>
+			</a>
+			<!--  selectors -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Selectors"
+				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
+				<i class="icon icon-code"></i>
+			</a>
+			<br/>
+			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<em><%- output.value %></em>
+				<% } %>
+			<%
+			});
+			%>
+		</div>
+	<%
+	});
+	%>
+	
+	<% if (groupedResults.BLUE) { %>
+		<div class="alert alert-info" role="alert">
+		<i class="icon icon-info-sign"></i>
+		<a role="button" data-toggle="collapse" href="#collapseSkip" aria-expanded="false" aria-controls="collapseSkip">
+		<%=groupedResults.BLUE.length%> informational checks.
+		</a>
+		These may include skips, errors and failures.
+		</div>
+		
+		<div class="collapse" id="collapseSkip">
+		<ul class="list-group">
+		
+					
+	<%
+	_.each(groupedResults.BLUE, function(result) {
+	%>
+		<li class="list-group-item">
+  			<i class="icon icon-info-sign"></i>
+  			<strong><%= result.check.name %></strong>
+			<%= result.check.description %>
+			<span class="badge pull-right"><%= result.status %></span>
+			<span class="badge pull-right"><%= result.check.level %></span>
+			<span class="badge pull-right"><%= result.check.type %></span>
+			<!-- code -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Code (<%= result.check.environment %>)"
+				data-content="<pre><%- result.check.code %></pre>">
+				<i class="icon icon-bug"></i>
+			</a>
+			<!--  selectors -->
+			<a 	
+				tabindex="0"
+				role="button"
+				class="popover-this" 
+				data-trigger="focus" 
+				data-html="true"
+				data-title="Selectors"
+				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
+				<i class="icon icon-code"></i>
+			</a>
+			<br/>
+			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<em><%- output.value %></em>
+				<% } %>
+			<%
+			});
+			%>
   		</li>
 	<%
 	});
@@ -160,83 +316,8 @@
 		</ul>
 		</div>
 		
-	<% } %>	
+	<% } %>
 	
-	<%
-	_.each(groupedResults.ERROR, function(result) {
-	%>
-		<div class="alert alert-warning" role="alert">
-  			<i class="icon icon-warning-sign"></i>
-			<strong><%= result.check.name %></strong>
-			<%= result.check.description %>
-			<span class="badge pull-right"><%= result.check.level %></span>
-			<span class="badge pull-right"><%= result.check.type %></span>
-			<!-- code -->
-			<a 	
-				tabindex="0"
-				role="button"
-				class="popover-this" 
-				data-trigger="focus" 
-				data-html="true"
-				data-title="Code (<%= result.check.environment %>)"
-				data-content="<pre><%- result.check.code %></pre>">
-				<i class="icon icon-bug"></i>
-			</a>
-			<!--  selectors -->
-			<a 	
-				tabindex="0"
-				role="button"
-				class="popover-this" 
-				data-trigger="focus" 
-				data-html="true"
-				data-title="Selectors"
-				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
-				<i class="icon icon-code"></i>
-			</a>
-			<br/>
-			<em><%- result.output[0].value %></em>
-		</div>
-	<%
-	});
-	%>
-	
-	<%
-	_.each(groupedResults.FAILURE, function(result) {
-	%>
-		<div class="alert alert-danger" role="alert">
-  			<i class="icon icon-remove-sign"></i>
-			<strong><%= result.check.name %></strong>
-			<%= result.check.description %>
-			<span class="badge pull-right"><%= result.check.level %></span>
-			<span class="badge pull-right"><%= result.check.type %></span>
-			<!-- code -->
-			<a 	
-				tabindex="0"
-				role="button"
-				class="popover-this" 
-				data-trigger="focus" 
-				data-html="true"
-				data-title="Code (<%= result.check.environment %>)"
-				data-content="<pre><%- result.check.code %></pre>">
-				<i class="icon icon-bug"></i>
-			</a>
-			<!--  selectors -->
-			<a 	
-				tabindex="0"
-				role="button"
-				class="popover-this" 
-				data-trigger="focus" 
-				data-html="true"
-				data-title="Selectors"
-				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
-				<i class="icon icon-code"></i>
-			</a>
-			<br/>
-			<em><%- result.output[0].value %></em>
-		</div>
-	<%
-	});
-	%>
     
   </div>
   
