@@ -1822,6 +1822,27 @@ svg .default{
 	overflow: auto;
 }
 
+/* different colors for each pie slice */
+#mdqResult .donut.data > g:nth-child(1) .donut-arc,
+#mdqResult .donut.data > g:nth-child(1) .donut-arc-label{
+	fill: #468847;
+}
+
+#mdqResult .donut.data > g:nth-child(2) .donut-arc,
+#mdqResult .donut.data > g:nth-child(2) .donut-arc-label{
+	fill: #c09853;
+}
+
+#mdqResult .donut.data > g:nth-child(3) .donut-arc,
+#mdqResult .donut.data > g:nth-child(3) .donut-arc-label{
+	fill: #b94a48;
+}
+
+#mdqResult .donut.data > g:nth-child(4) .donut-arc,
+#mdqResult .donut.data > g:nth-child(4) .donut-arc-label{
+	fill: #3a87ad;
+}
+
  .format-charts{
 	margin-left: auto;
 	margin-right: auto;

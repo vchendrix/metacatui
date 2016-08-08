@@ -161,35 +161,22 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 			
 			var dataCount = results.length;
 			
-			// TODO: what is data?
-			/*
-			 var data = [
-			            {label: "Pass",
-			            count: groupedResults.GREEN.length,
-			            perc: groupedResults.GREEN.length/results.length
-			            },
-			            {label: "Fail",
-			            count: groupedResults.RED.length,
-			            perc: groupedResults.RED.length/results.length
-			            },
-				        {label: "Info",
-			            count: groupedResults.BLUE.length,
-			            perc: groupedResults.BLUE.length/results.length
-			            },  
-			            {label: "Warning",
-			            count: groupedResults.ORANGE.length,
-			            perc: groupedResults.ORANGE.length/results.length
-					    }       
-			        ];
-			        */
 			
 			var data = [
+			            {label: "Pass", count: groupedResults.GREEN.length, perc: groupedResults.GREEN.length/results.length },
+			            {label: "Warning", count:  groupedResults.ORANGE.length, perc: groupedResults.ORANGE.length/results.length},
+			            {label: "Fail", count: groupedResults.RED.length, perc: groupedResults.RED.length/results.length},
+			            {label: "Info", count: groupedResults.BLUE.length, perc: groupedResults.BLUE.length/results.length},
+			        ];
+			/*
+			var data = [
 			            "Pass", groupedResults.GREEN.length,
+			            "Warning", groupedResults.ORANGE.length,
 			            "Fail", groupedResults.RED.length,
 			            "Info", groupedResults.BLUE.length,
-			            "Warning", groupedResults.ORANGE.length       
 			        ];
-
+			 */
+			
 			var svgClass = "data";
 			
 			//If d3 isn't supported in this browser or didn't load correctly, insert a text title instead
