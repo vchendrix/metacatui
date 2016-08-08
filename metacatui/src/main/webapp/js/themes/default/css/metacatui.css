@@ -1812,6 +1812,16 @@ svg .default{
 	float: left;
 }
 
+#mdqResult #data-chart {
+	height: 200px;
+	width: 220px;
+	margin:0px;	
+}
+
+#mdqResult .panel-heading {
+	overflow: auto;
+}
+
  .format-charts{
 	margin-left: auto;
 	margin-right: auto;

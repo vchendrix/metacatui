@@ -1,6 +1,6 @@
 /*global define */
-define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html', 'text!templates/loading.html'], 				
-	function($, _, Backbone, MdqRunTemplate, LoadingTemplate) {
+define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/mdqRun.html', 'text!templates/loading.html'], 				
+	function($, _, Backbone, d3, DonutChart, MdqRunTemplate, LoadingTemplate) {
 	'use strict';
 	
 	// Build the Footer view of the application
@@ -86,6 +86,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html', 'text!
 							viewRef.$el.html(viewRef.template(data));
 							//Initialize all popover elements
 							$('.popover-this').popover();
+							viewRef.drawScoreChart(data.result);
 							viewRef.show();
 						}
 				};
@@ -106,6 +107,114 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html', 'text!
 			
 			return false;
 
+		},
+		
+		groupResults: function(results) {
+			var groupedResults = _.groupBy(results, function(result) {
+				var color;
+				
+				// simple cases
+				// always blue for info and skip
+				if (result.check.level == 'INFO') {
+					color = 'BLUE';
+					return color;
+				}
+				if (result.status == 'SKIP') {
+					color = 'BLUE';
+					return color;
+				}
+				// always green for success
+				if (result.status == 'SUCCESS') {
+					color = 'GREEN';
+					return color;
+				} 
+				
+				// handle failures and warnings
+				if (result.status == 'FAILURE') {
+					color = 'RED';
+					if (result.check.level == 'OPTIONAL') {
+						color = 'ORANGE';
+					}
+				}
+				if (result.status == 'ERROR') {
+					color = 'ORANGE';
+					if (result.check.level == 'REQUIRED') {
+						color = 'RED';
+					}
+				}
+				//console.log("result color:" + color);
+				return color;
+				
+			});
+			
+			var total = results.length;
+			if (groupedResults.BLUE) {
+				total = total - groupedResults.BLUE.length;
+			}
+			
+			return groupedResults;
+		},
+		
+		drawScoreChart: function(results){
+			
+			var groupedResults = this.groupResults(results);
+			
+			var dataCount = results.length;
+			
+			// TODO: what is data?
+			/*
+			 var data = [
+			            {label: "Pass",
+			            count: groupedResults.GREEN.length,
+			            perc: groupedResults.GREEN.length/results.length
+			            },
+			            {label: "Fail",
+			            count: groupedResults.RED.length,
+			            perc: groupedResults.RED.length/results.length
+			            },
+				        {label: "Info",
+			            count: groupedResults.BLUE.length,
+			            perc: groupedResults.BLUE.length/results.length
+			            },  
+			            {label: "Warning",
+			            count: groupedResults.ORANGE.length,
+			            perc: groupedResults.ORANGE.length/results.length
+					    }       
+			        ];
+			        */
+			
+			var data = [
+			            "Pass", groupedResults.GREEN.length,
+			            "Fail", groupedResults.RED.length,
+			            "Info", groupedResults.BLUE.length,
+			            "Warning", groupedResults.ORANGE.length       
+			        ];
+
+			var svgClass = "data";
+			
+			//If d3 isn't supported in this browser or didn't load correctly, insert a text title instead
+			if(!d3){
+				this.$('.format-charts-data').html("<h2 class='" + svgClass + " fallback'>" + appView.commaSeparateNumber(dataCount) + " data files</h2>");
+				
+				return;
+			}
+			
+			//Draw a donut chart
+			var donut = new DonutChart({
+							id: "data-chart",
+							data: data, 
+							total: dataCount,
+							titleText: "checks", 
+							titleCount: dataCount,
+							svgClass: svgClass,
+							countClass: "data",
+							height: 200,
+							width: 200,
+							formatLabel: function(name) {
+								return name;
+							}
+						});
+			this.$('.format-charts-data').html(donut.render().el);
 		}
 				
 	});
