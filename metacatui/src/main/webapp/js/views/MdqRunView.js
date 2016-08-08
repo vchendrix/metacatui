@@ -164,7 +164,7 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 			
 			var data = [
 			            {label: "Pass", count: groupedResults.GREEN.length, perc: groupedResults.GREEN.length/results.length },
-			            {label: "Warning", count:  groupedResults.ORANGE.length, perc: groupedResults.ORANGE.length/results.length},
+			            {label: "Warn", count:  groupedResults.ORANGE.length, perc: groupedResults.ORANGE.length/results.length},
 			            {label: "Fail", count: groupedResults.RED.length, perc: groupedResults.RED.length/results.length},
 			            {label: "Info", count: groupedResults.BLUE.length, perc: groupedResults.BLUE.length/results.length},
 			        ];
