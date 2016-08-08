@@ -1,6 +1,6 @@
 /*global define */
-define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html'], 				
-	function($, _, Backbone, MdqRunTemplate) {
+define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html', 'text!templates/loading.html'], 				
+	function($, _, Backbone, MdqRunTemplate, LoadingTemplate) {
 	'use strict';
 	
 	// Build the Footer view of the application
@@ -16,6 +16,8 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html'],
 		
 		pid: null,
 		
+		loadingTemplate: _.template(LoadingTemplate),
+
 		template: _.template(MdqRunTemplate),
 		
 		initialize: function () {
@@ -26,6 +28,9 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html'],
 			var viewRef = this;
 
 			if (this.pid) {
+				
+				this.showLoading();
+				
 				// fetch the metadata contents by the pid
 				var xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function(){
@@ -54,6 +59,16 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html'],
 			
 		},
 		
+		showLoading: function() {
+			this.$el.html(this.loadingTemplate());
+		},
+		
+		show: function() {
+			var view = this;
+			this.$el.hide();
+			this.$el.fadeIn({duration: "slow"});
+		},
+		
 		// do the work of sending the data and rendering the results
 		showResults: function(formData) {
 			var viewRef = this;
@@ -71,6 +86,7 @@ define(['jquery', 'underscore', 'backbone', 'text!templates/mdqRun.html'],
 							viewRef.$el.html(viewRef.template(data));
 							//Initialize all popover elements
 							$('.popover-this').popover();
+							viewRef.show();
 						}
 				};
 				$.ajax(args);
