@@ -197,6 +197,7 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 							countClass: "data",
 							height: 200,
 							width: 200,
+							keepOrder: true,
 							formatLabel: function(name) {
 								return name;
 							}

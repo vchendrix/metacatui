@@ -34,6 +34,7 @@ define(['jquery', 'underscore', 'backbone', 'd3'],
 			this.total		= options.total		 || 0;
 			this.formatLabel=options.formatLabel || function(d){ return d }
 			this.data	    = this.formatDonutData(options.data, options.total) || [{label: "", count: 0, perc: 0}];
+			this.keepOrder	= options.keepOrder || false;
 			this.drawLabels = (this.data)
 		},
 		
@@ -86,10 +87,22 @@ define(['jquery', 'underscore', 'backbone', 'd3'],
 	         * Draw the arcs
 	         * ========================================================================
 	         */
-
+	        
+	        // sort or not
+	        var theData = donut.value(
+    				function(d) {
+    					return d.perc 
+    				});
+	        if (this.keepOrder) {
+	        	theData = donut.value(
+        				function(d) {
+        					return d.perc 
+        				}).sort(null);
+	        }
 	        //Set up a group for each arc we will create
-	        var arcs = vis.selectAll("g.arc")
-	            .data(donut.value(function(d) { return d.perc })) //connect data to this group 
+	        var arcs = 
+	        	vis.selectAll("g.arc")
+	            .data(theData) //connect data to this group 
 	            .enter().append("svg:g") 
 	            .attr("class", "donut-arc-group")
 	            .attr("transform",
