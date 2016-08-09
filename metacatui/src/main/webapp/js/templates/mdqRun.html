@@ -34,43 +34,7 @@
 		
 	</div>	
 	<div class="panel-body">
-	<%
-		var groupedResults = _.groupBy(result, function(result) {
-			var color;
-			
-			// simple cases
-			// always blue for info and skip
-			if (result.check.level == 'INFO') {
-				color = 'BLUE';
-				return color;
-			}
-			if (result.status == 'SKIP') {
-				color = 'BLUE';
-				return color;
-			}
-			// always green for success
-			if (result.status == 'SUCCESS') {
-				color = 'GREEN';
-				return color;
-			} 
-			
-			// handle failures and warnings
-			if (result.status == 'FAILURE') {
-				color = 'RED';
-				if (result.check.level == 'OPTIONAL') {
-					color = 'ORANGE';
-				}
-			}
-			if (result.status == 'ERROR') {
-				color = 'ORANGE';
-				if (result.check.level == 'REQUIRED') {
-					color = 'RED';
-				}
-			}
-			//console.log("result color:" + color);
-			return color;
-			
-		});
+		<%
 		
 		var total = result.length;
 		if (groupedResults.BLUE) {

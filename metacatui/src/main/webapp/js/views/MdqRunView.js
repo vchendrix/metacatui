@@ -82,12 +82,18 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 					    processData: false,
 					    type: 'POST',
 						success: function(data, textStatus, xhr) {
-							data = _.extend(data, {objectIdentifier: viewRef.pid})
+							var groupedResults = viewRef.groupResults(data.result);
+							data = _.extend(data, 
+									{
+										objectIdentifier: viewRef.pid,
+										groupedResults: groupedResults
+									});
+
 							viewRef.$el.html(viewRef.template(data));
+							viewRef.drawScoreChart(data.result, groupedResults);
+							viewRef.show();
 							//Initialize all popover elements
 							$('.popover-this').popover();
-							viewRef.drawScoreChart(data.result);
-							viewRef.show();
 						}
 				};
 				$.ajax(args);
@@ -155,10 +161,8 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 			return groupedResults;
 		},
 		
-		drawScoreChart: function(results){
-			
-			var groupedResults = this.groupResults(results);
-			
+		drawScoreChart: function(results, groupedResults){
+						
 			var dataCount = results.length;
 			
 			
