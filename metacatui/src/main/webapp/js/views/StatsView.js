@@ -46,9 +46,14 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'LineChart', 'BarChart', 'Donu
 			// set the header type
 			appModel.set('headerType', 'default');
 			
+			var baseUrl = appModel.get('objectServiceUrl');
+			baseUrl = baseUrl.replace("/v2/object/", "");
+			baseUrl = encodeURIComponent(baseUrl);
+			
 			//Insert the template
 			this.$el.html(this.template({
 				query: statsModel.get('query'),
+				baseUrl: baseUrl,
 				title: this.title,
 				description: this.description
 			}));
