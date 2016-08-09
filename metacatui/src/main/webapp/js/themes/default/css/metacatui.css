@@ -1843,6 +1843,16 @@ svg .default{
 	fill: #3a87ad;
 }
 
+#mdqResult .donut-labels{
+	opacity: 0.0;
+}
+
+#mdqResult .donut-arc.active + .donut-labels,
+#mdqResult .donut-arc.active + .donut-labels .donut-arc-count.rotated{
+	opacity: 1;
+	font-weight: bold;
+}
+
  .format-charts{
 	margin-left: auto;
 	margin-right: auto;
