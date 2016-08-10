@@ -1823,23 +1823,35 @@ svg .default{
 }
 
 /* different colors for each pie slice */
-#mdqResult .donut.data > g:nth-child(1) .donut-arc,
-#mdqResult .donut.data > g:nth-child(1) .donut-arc-label{
+#mdqResult .donut.data > g:nth-child(1) .donut-arc {
+	fill: #dff0d8;
+}
+#mdqResult .donut.data > g:nth-child(1) .donut-arc-label,
+#mdqResult .donut.data > g:nth-child(1) .donut-arc.active {
 	fill: #468847;
 }
 
-#mdqResult .donut.data > g:nth-child(2) .donut-arc,
-#mdqResult .donut.data > g:nth-child(2) .donut-arc-label{
+#mdqResult .donut.data > g:nth-child(2) .donut-arc {
+	fill: #fcf8e3;
+}
+#mdqResult .donut.data > g:nth-child(2) .donut-arc-label,
+#mdqResult .donut.data > g:nth-child(2) .donut-arc.active {
 	fill: #c09853;
 }
 
-#mdqResult .donut.data > g:nth-child(3) .donut-arc,
-#mdqResult .donut.data > g:nth-child(3) .donut-arc-label{
+#mdqResult .donut.data > g:nth-child(3) .donut-arc {
+	fill: #f2dede;
+}
+#mdqResult .donut.data > g:nth-child(3) .donut-arc-label,
+#mdqResult .donut.data > g:nth-child(3) .donut-arc.active {
 	fill: #b94a48;
 }
 
-#mdqResult .donut.data > g:nth-child(4) .donut-arc,
-#mdqResult .donut.data > g:nth-child(4) .donut-arc-label{
+#mdqResult .donut.data > g:nth-child(4) .donut-arc  {
+	fill: #d9edf7;
+}
+#mdqResult .donut.data > g:nth-child(4) .donut-arc-label,
+#mdqResult .donut.data > g:nth-child(4) .donut-arc.active {
 	fill: #3a87ad;
 }
 
