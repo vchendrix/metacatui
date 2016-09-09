@@ -153,10 +153,26 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 				
 			});
 			
+			// make sure we have everything, even if empty
+			if (!groupedResults.BLUE) {
+				groupedResults.BLUE = [];
+			}
+			if (!groupedResults.GREEN) {
+				groupedResults.GREEN = [];
+			}
+			if (!groupedResults.ORANGE) {
+				groupedResults.ORANGE = [];
+			}
+			if (!groupedResults.RED) {
+				groupedResults.RED = [];
+			}
+			
 			var total = results.length;
 			if (groupedResults.BLUE) {
 				total = total - groupedResults.BLUE.length;
 			}
+			
+			
 			
 			return groupedResults;
 		},
