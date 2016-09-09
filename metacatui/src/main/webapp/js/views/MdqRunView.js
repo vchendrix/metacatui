@@ -12,7 +12,7 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 			"click input[type='submit']"	:	"submitForm"
 		},
 				
-		url: "/mdq-webapp/webapi/suites/test-lter-suite.1.1/run",
+		url: "/mdq-webapp/webapi/suites/arctic.data.center.suite.1/run",
 		
 		pid: null,
 		
