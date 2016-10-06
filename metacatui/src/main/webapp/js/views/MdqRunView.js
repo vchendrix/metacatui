@@ -1,6 +1,6 @@
 /*global define */
-define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/mdqRun.html', 'text!templates/loading.html'], 				
-	function($, _, Backbone, d3, DonutChart, MdqRunTemplate, LoadingTemplate) {
+define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/mdqRun.html', 'text!templates/mdqSuites.html', 'text!templates/loading.html'], 				
+	function($, _, Backbone, d3, DonutChart, MdqRunTemplate, SuitesTemplate, LoadingTemplate) {
 	'use strict';
 	
 	// Build the Footer view of the application
@@ -9,22 +9,49 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 		el: '#Content',
 				
 		events: {
-			"click input[type='submit']"	:	"submitForm"
+			"click input[type='submit']"	:	"submitForm",
+			"change #suiteId" : "switchSuite"
 		},
 				
-		url: "/mdq-webapp/webapi/suites/arctic.data.center.suite.1/run",
+		suitesUrl: "/mdq-webapp/webapi/suites/",
+
+		url: null,
 		
 		pid: null,
+		
+		suiteId: null,
 		
 		loadingTemplate: _.template(LoadingTemplate),
 
 		template: _.template(MdqRunTemplate),
 		
+		suitesTemplate: _.template(SuitesTemplate),
+
+		
 		initialize: function () {
 			
 		},
+		
+		switchSuite: function(event) {
+			console.log("Switching Suite");
+			
+			var select = $(event.target);
+
+			var suiteId = $(select).val();
+			
+			uiRouter.navigate("mdq/" + suiteId + "/" + this.pid, {trigger: true});
+			
+			return false;
+		},
 				
 		render: function () {
+			
+			// use the requested suite if provided
+			if (!this.suiteId) {
+				this.suiteId = "arctic.data.center.suite.1";
+			}
+			this.url = this.suitesUrl + this.suiteId + "/run";
+
 			var viewRef = this;
 
 			if (this.pid) {
@@ -69,31 +96,23 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 			this.$el.fadeIn({duration: "slow"});
 		},
 		
-		// do the work of sending the data and rendering the results
-		showResults: function(formData) {
+		// lookup the suites we can run
+		showAvailableSuites: function() {
 			var viewRef = this;
 			
 			try {				
 				var args = {
-						url: this.url,
-						cache: false,
-						data: formData,
-					    contentType: false, //"multipart/form-data",
-					    processData: false,
-					    type: 'POST',
+						url: this.suitesUrl,
+					    type: 'GET',
 						success: function(data, textStatus, xhr) {
-							var groupedResults = viewRef.groupResults(data.result);
-							data = _.extend(data, 
-									{
-										objectIdentifier: viewRef.pid,
-										groupedResults: groupedResults
-									});
-
-							viewRef.$el.html(viewRef.template(data));
-							viewRef.drawScoreChart(data.result, groupedResults);
-							viewRef.show();
+							viewRef.$el.find('#suites').append(
+									viewRef.suitesTemplate(
+											{
+												suiteId: viewRef.suiteId,
+												suiteIds: data
+											}));
 							//Initialize all popover elements
-							$('.popover-this').popover();
+							//$('.popover-this').popover();
 						}
 				};
 				$.ajax(args);
@@ -113,6 +132,41 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 			
 			return false;
 
+		},
+		
+		// do the work of sending the data and rendering the results
+		showResults: function(formData) {
+			var viewRef = this;
+			
+			try {				
+				var args = {
+						url: this.url,
+						cache: false,
+						data: formData,
+					    contentType: false, //"multipart/form-data",
+					    processData: false,
+					    type: 'POST',
+						success: function(data, textStatus, xhr) {
+							var groupedResults = viewRef.groupResults(data.result);
+							data = _.extend(data, 
+									{
+										objectIdentifier: viewRef.pid,
+										suiteId: viewRef.suiteId,
+										groupedResults: groupedResults
+									});
+
+							viewRef.$el.html(viewRef.template(data));
+							viewRef.drawScoreChart(data.result, groupedResults);
+							viewRef.showAvailableSuites();
+							viewRef.show();
+							//Initialize all popover elements
+							$('.popover-this').popover();
+						}
+				};
+				$.ajax(args);
+			} catch (error) {
+				console.log(error.stack);
+			}
 		},
 		
 		groupResults: function(results) {
