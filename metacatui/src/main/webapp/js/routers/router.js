@@ -25,7 +25,7 @@ function ($, _, Backbone) {
 			'signup'          			: 'renderLdap',     // use ldapweb for registration
 			'account(/:stage)'          : 'renderLdap',     // use ldapweb for different stages
 			'share(/:stage/*pid)'       : 'renderRegistry', // registry page
-			'mdq(/:suiteId)(/:pid)'       : 'renderMdqRun', // MDQ page
+			'mdq(/s=:suiteId)(/:pid)'       : 'renderMdqRun', // MDQ page
 			'api(/:anchorId)'           : 'renderAPI'       // API page 
 		},
 		

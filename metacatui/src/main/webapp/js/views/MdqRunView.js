@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 
 			var suiteId = $(select).val();
 			
-			uiRouter.navigate("mdq/" + suiteId + "/" + this.pid, {trigger: true});
+			uiRouter.navigate("mdq/s=" + suiteId + "/" + this.pid, {trigger: true});
 			
 			return false;
 		},
