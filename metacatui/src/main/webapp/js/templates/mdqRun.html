@@ -88,8 +88,24 @@
 	
   		<li class="list-group-item">
   			<i class="icon icon-check"></i>
-  			<strong><%= result.check.name %></strong>
-  			<span class="badge pull-right"><%= result.check.level %></span>
+  			
+  			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<strong><%- output.value %></strong>
+				<% } %>
+			<%
+			});
+			%>
+			<br/>
+  			
+  			<em><%= result.check.name %></em>
+  			<span class="badge pull-right"><%= result.status %></span>
+			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
 			<br/>
 			<%= result.check.description %>
@@ -117,21 +133,6 @@
 				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
 			</a>
-				
-			<br/>
-			
-			<%
-			_.each(result.output, function(output) {
-			%>				
-				<% if (output.type && output.type.includes('image')) { %>
-					<!-- render the image -->
-					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
-				<% } else { %>
-					<em><%- output.value %></em>
-				<% } %>
-			<%
-			});
-			%>
 			
   		</li>
 	<%
@@ -150,7 +151,22 @@
 	%>
 		<div class="alert alert-warning" role="alert">
   			<i class="icon icon-warning-sign"></i>
-			<strong><%= result.check.name %></strong>
+  			
+			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<strong><%- output.value %></strong>
+				<% } %>
+			<%
+			});
+			%>
+  			<br/>
+  			
+  			<em><%= result.check.name %></em>
 			<span class="badge pull-right"><%= result.status %></span>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
@@ -178,19 +194,7 @@
 				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
 			</a>
-			<br/>
-			<%
-			_.each(result.output, function(output) {
-			%>				
-				<% if (output.type && output.type.includes('image')) { %>
-					<!-- render the image -->
-					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
-				<% } else { %>
-					<em><%- output.value %></em>
-				<% } %>
-			<%
-			});
-			%>
+			
 		</div>
 	<%
 	});
@@ -200,8 +204,24 @@
 	_.each(groupedResults.RED, function(result) {
 	%>
 		<div class="alert alert-danger" role="alert">
-  			<i class="icon icon-remove-sign"></i>
-			<strong><%= result.check.name %></strong>
+  			<i class="icon icon-check-empty"></i>
+  			
+			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<strong><%- output.value %></strong>
+				<% } %>
+			<%
+			});
+			%>
+  			
+  			<br/>
+  			
+  			<em><%= result.check.name %></em>
 			<span class="badge pull-right"><%= result.status %></span>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
@@ -229,19 +249,7 @@
 				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
 			</a>
-			<br/>
-			<%
-			_.each(result.output, function(output) {
-			%>				
-				<% if (output.type && output.type.includes('image')) { %>
-					<!-- render the image -->
-					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
-				<% } else { %>
-					<em><%- output.value %></em>
-				<% } %>
-			<%
-			});
-			%>
+			
 		</div>
 	<%
 	});
@@ -265,7 +273,22 @@
 	%>
 		<li class="list-group-item">
   			<i class="icon icon-info-sign"></i>
-  			<strong><%= result.check.name %></strong>
+  			
+			<%
+			_.each(result.output, function(output) {
+			%>				
+				<% if (output.type && output.type.includes('image')) { %>
+					<!-- render the image -->
+					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
+				<% } else { %>
+					<strong><%- output.value %></strong>
+				<% } %>
+			<%
+			});
+			%>
+  			<br/>
+  			
+  			<em><%= result.check.name %></em>
 			<span class="badge pull-right"><%= result.status %></span>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
@@ -293,19 +316,7 @@
 				data-content="<dl class=''><% _.each(result.check.selector, function(selector) { print('<dt>', selector.name, '</dt>'); print('<dd>', selector.xpath, '</dd>'); }); %></dl>">
 				<i class="icon icon-code"></i>
 			</a>
-			<br/>
-			<%
-			_.each(result.output, function(output) {
-			%>				
-				<% if (output.type && output.type.includes('image')) { %>
-					<!-- render the image -->
-					<img src="data:<%- output.type %>;base64, <%- output.value %>"/>
-				<% } else { %>
-					<em><%- output.value %></em>
-				<% } %>
-			<%
-			});
-			%>
+			
   		</li>
 	<%
 	});
