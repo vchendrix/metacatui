@@ -20,42 +20,55 @@
 
 <div class="panel panel-default mdq">
 	<div class="panel-heading">
-	
-		<div class="format-charts-data"></div>
+			
+		<div id="mdqSummary">
+			<h4>Metadata Quality report for <em><%= objectIdentifier %></em></h4>
+			<!-- <p>Date: <em><%= timestamp %></em></p> -->
+			<!--  Run ID: <%= id %>	-->
+			<p>
+			After running your metadata package against our standard set of metadata, data, and congruency checks, 
+			we have found the following potential issues. 
+			Please assist us in improving the discoverability and reusability of your research data by addressing the issues below.
+			</p>
+		</div>
 		
-		<h4>Metadata Quality report for <em><%= objectIdentifier %></em></h4>
-		<div id="suites"></div>
-		<p>Date: <em><%= timestamp %></em></p>
-		<!--  Run ID: <%= id %>	-->
-		<p>
-		After running your <em><%= objectIdentifier %></em> metadata package against our standard set of metadata, data, and congruency checks, 
-		we have found the following potential issues. 
-		Please assist us in improving the discoverability and reusability of your research data by addressing the issues below.
-		</p>
+		<div id="mdqDonut" class="format-charts-data"></div>		
 		
-		<div style="float: left;">
-		<ul>
-		<%
-		var types = _.keys(groupedByType);
-		_.each(types, function(type) {
-			var results = groupedByType[type];
-			var total = results.length;
-			var success = 0;
-			_.each(results, function(result) {
-				if (result.status == "SUCCESS") {
-					success++;
-				}
+		<div id="mdqTypeSummary">
+			
+			<div id="suites"></div>			
+			
+			<%
+			var types = _.keys(groupedByType);
+			_.each(types, function(type) {
+				var results = groupedByType[type];
+				var total = results.length;
+				var success = 0;
+				_.each(results, function(result) {
+					if (result.status == "SUCCESS") {
+						success++;
+					}
+				});
+				var width = (success/total) * 100;
+				width = width.toFixed(0);
+				
+			%>			
+					<span class="strong" style="text-transform: capitalize;"><%=type%></span>: <%=width%>% complete
+					<div class="progress">
+						<div class="progress-bar progress-bar-success" 
+						role="progressbar" 
+						aria-valuenow="<%=success%>" 
+						aria-valuemin="0" aria-valuemax="<%=total%>" 
+						style="width: <%=width%>%;">
+						
+						</div>
+					</div>
+			<%
+			
 			});
 			
-		%>
-			<li><span class="strong" style="text-transform: capitalize;"><%=type%></span>: Passed <%=success%> out of <%=total%></li>
-		<%
+			%>
 		
-		});
-		
-		%>
-		
-		</ul>
 		</div>
 		
 	</div>	
@@ -146,13 +159,27 @@
 	
 	
 		
+	<% if (groupedResults.ORANGE) { %>
+	
+		<div class="alert alert-warning" role="alert">
+		<i class="icon icon-warning-sign"></i>
+		<a role="button" data-toggle="collapse" href="#collapseWarning" aria-expanded="false" aria-controls="collapseWarning">
+		Warning for <%=groupedResults.ORANGE.length%> checks.
+		</a>
+		Please review these warnings.
+		</div>
+		
+		<div class="collapse" id="collapseWarning">
+		<ul class="list-group">
+	
 	<%
 	_.each(groupedResults.ORANGE, function(result) {
 	%>
-		<div class="alert alert-warning" role="alert">
-  			<i class="icon icon-warning-sign"></i>
+	
+  		<li class="list-group-item">
+  			<i class="icon icon-check-empty"></i>
   			
-			<%
+  			<%
 			_.each(result.output, function(output) {
 			%>				
 				<% if (output.type && output.type.includes('image')) { %>
@@ -164,14 +191,15 @@
 			<%
 			});
 			%>
-  			<br/>
+			<br/>
   			
   			<em><%= result.check.name %></em>
-			<span class="badge pull-right"><%= result.status %></span>
+  			<span class="badge pull-right"><%= result.status %></span>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
 			<br/>
 			<%= result.check.description %>
+			
 			<!-- code -->
 			<a 	
 				tabindex="0"
@@ -183,6 +211,7 @@
 				data-content="<pre><%- result.check.code %></pre>">
 				<i class="icon icon-bug"></i>
 			</a>
+			
 			<!--  selectors -->
 			<a 	
 				tabindex="0"
@@ -195,18 +224,37 @@
 				<i class="icon icon-code"></i>
 			</a>
 			
-		</div>
+  		</li>
 	<%
 	});
 	%>
 	
+		</ul>
+		</div>
+		
+	<% } %>	
+	
+	<% if (groupedResults.RED) { %>
+	
+		<div class="alert alert-error" role="alert">
+		<i class="icon icon-remove-sign"></i>
+		<a role="button" data-toggle="collapse" href="#collapseFail" aria-expanded="false" aria-controls="collapseFail">
+		Failed <%=groupedResults.RED.length%> checks.
+		</a>
+		Please correct these issues.
+		</div>
+		
+		<div class="collapse" id="collapseFail">
+		<ul class="list-group">
+	
 	<%
 	_.each(groupedResults.RED, function(result) {
 	%>
-		<div class="alert alert-danger" role="alert">
+	
+  		<li class="list-group-item">
   			<i class="icon icon-check-empty"></i>
   			
-			<%
+  			<%
 			_.each(result.output, function(output) {
 			%>				
 				<% if (output.type && output.type.includes('image')) { %>
@@ -218,15 +266,15 @@
 			<%
 			});
 			%>
-  			
-  			<br/>
+			<br/>
   			
   			<em><%= result.check.name %></em>
-			<span class="badge pull-right"><%= result.status %></span>
+  			<span class="badge pull-right"><%= result.status %></span>
 			<span class="badge pull-right"><%= result.check.level %></span>
 			<span class="badge pull-right"><%= result.check.type %></span>
 			<br/>
 			<%= result.check.description %>
+			
 			<!-- code -->
 			<a 	
 				tabindex="0"
@@ -238,6 +286,7 @@
 				data-content="<pre><%- result.check.code %></pre>">
 				<i class="icon icon-bug"></i>
 			</a>
+			
 			<!--  selectors -->
 			<a 	
 				tabindex="0"
@@ -250,10 +299,15 @@
 				<i class="icon icon-code"></i>
 			</a>
 			
-		</div>
+  		</li>
 	<%
 	});
 	%>
+	
+		</ul>
+		</div>
+		
+	<% } %>	
 	
 	<% if (groupedResults.BLUE) { %>
 		<div class="alert alert-info" role="alert">

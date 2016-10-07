@@ -278,8 +278,8 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 							titleCount: dataCount,
 							svgClass: svgClass,
 							countClass: "data",
-							height: 200,
-							width: 200,
+							height: 250,
+							width: 250,
 							keepOrder: true,
 							formatLabel: function(name) {
 								return name;
