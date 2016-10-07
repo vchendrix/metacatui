@@ -86,7 +86,7 @@
 	
 		<div class="alert alert-success" role="alert">
 		<i class="icon icon-check-sign"></i>
-		<a role="button" data-toggle="collapse" href="#collapseSuccess" aria-expanded="false" aria-controls="collapseSuccess">
+		<a class="collapsed" role="button" data-toggle="collapse" href="#collapseSuccess" aria-expanded="false" aria-controls="collapseSuccess">
 		Passed <%=groupedResults.GREEN.length%> checks out of <%= total %>.
 		</a>
 		Good job!
@@ -163,7 +163,7 @@
 	
 		<div class="alert alert-warning" role="alert">
 		<i class="icon icon-warning-sign"></i>
-		<a role="button" data-toggle="collapse" href="#collapseWarning" aria-expanded="false" aria-controls="collapseWarning">
+		<a class="collapsed" role="button" data-toggle="collapse" href="#collapseWarning" aria-expanded="false" aria-controls="collapseWarning">
 		Warning for <%=groupedResults.ORANGE.length%> checks.
 		</a>
 		Please review these warnings.
@@ -238,7 +238,7 @@
 	
 		<div class="alert alert-error" role="alert">
 		<i class="icon icon-remove-sign"></i>
-		<a role="button" data-toggle="collapse" href="#collapseFail" aria-expanded="false" aria-controls="collapseFail">
+		<a class="collapsed" role="button" data-toggle="collapse" href="#collapseFail" aria-expanded="false" aria-controls="collapseFail">
 		Failed <%=groupedResults.RED.length%> checks.
 		</a>
 		Please correct these issues.
@@ -312,7 +312,7 @@
 	<% if (groupedResults.BLUE) { %>
 		<div class="alert alert-info" role="alert">
 		<i class="icon icon-info-sign"></i>
-		<a role="button" data-toggle="collapse" href="#collapseSkip" aria-expanded="false" aria-controls="collapseSkip">
+		<a class="collapsed" role="button" data-toggle="collapse" href="#collapseSkip" aria-expanded="false" aria-controls="collapseSkip">
 		<%=groupedResults.BLUE.length%> informational checks.
 		</a>
 		These may include skips, errors and failures.

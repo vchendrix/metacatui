@@ -777,6 +777,21 @@ img.icon{
 }
 
 /* MDQ */
+
+#mdqResult .alert [data-toggle="collapse"]:after
+{
+    /*content: "\e072"; "play" icon */
+    content: "-";
+    float: right;
+    color: #b0c5d8;
+    font-size: 18px;
+    line-height: 22px;
+}
+#mdqResult .alert [data-toggle="collapse"].collapsed:after
+{
+    content: "+";
+}
+
 .mdq .popover {
 	max-width: 50%;
 }
