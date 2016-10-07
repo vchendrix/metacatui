@@ -148,11 +148,14 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 					    type: 'POST',
 						success: function(data, textStatus, xhr) {
 							var groupedResults = viewRef.groupResults(data.result);
+							var groupedByType = viewRef.groupByType(data.result);
+
 							data = _.extend(data, 
 									{
 										objectIdentifier: viewRef.pid,
 										suiteId: viewRef.suiteId,
-										groupedResults: groupedResults
+										groupedResults: groupedResults,
+										groupedByType: groupedByType
 									});
 
 							viewRef.$el.html(viewRef.template(data));
@@ -226,7 +229,13 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 				total = total - groupedResults.BLUE.length;
 			}
 			
-			
+			return groupedResults;
+		},
+		
+		groupByType: function(results) {
+			var groupedResults = _.groupBy(results, function(result) {
+				return result.check.type;
+			});
 			
 			return groupedResults;
 		},

@@ -33,6 +33,31 @@
 		Please assist us in improving the discoverability and reusability of your research data by addressing the issues below.
 		</p>
 		
+		<div style="float: left;">
+		<ul>
+		<%
+		var types = _.keys(groupedByType);
+		_.each(types, function(type) {
+			var results = groupedByType[type];
+			var total = results.length;
+			var success = 0;
+			_.each(results, function(result) {
+				if (result.status == "SUCCESS") {
+					success++;
+				}
+			});
+			
+		%>
+			<li><span class="strong" style="text-transform: capitalize;"><%=type%></span>: Passed <%=success%> out of <%=total%></li>
+		<%
+		
+		});
+		
+		%>
+		
+		</ul>
+		</div>
+		
 	</div>	
 	<div class="panel-body">
 		<%
