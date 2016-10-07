@@ -234,7 +234,7 @@ define(['jquery', 'underscore', 'backbone', 'd3', 'DonutChart', 'text!templates/
 		
 		groupByType: function(results) {
 			var groupedResults = _.groupBy(results, function(result) {
-				return result.check.type;
+				return result.check.type || "uncategorized";
 			});
 			
 			return groupedResults;
